@@ -3,11 +3,8 @@ package com.shopme.admin.user;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
-import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -179,6 +176,15 @@ public class UserRepositoryTest {
 		
 		User user = repo.findById(randomId).get();
 		repo.deleteById(user.getId());
+		
+		
+	}
+	
+	@Test public void testGetUserByEmail() {
+		String email = "abc@email.com";
+		User user = repo.getUserByEmail(email);
+		assertThat(user).isNotNull();
+		
 		
 		
 	}
