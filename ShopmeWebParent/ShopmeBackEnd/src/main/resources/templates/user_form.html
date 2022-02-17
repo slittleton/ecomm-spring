@@ -6,7 +6,7 @@
 	content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
 
 
-<title>Create New User</title>
+<title>[[${pageTitle}]]</title>
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <link rel="stylesheet"
 	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css" />
@@ -55,7 +55,7 @@
 		</div>
 
 		<div>
-			<h2>Manage Users | Create New User</h2>
+			<h2>Manage Users | [[${pageTitle}]]</h2>
 			<a th:href="@{/users/new}">Create New User</a>
 		</div>
 
@@ -117,7 +117,7 @@
 					<!--  Enabled Field -->
 					<div>
 						<label class="col-sm-4 col-form-label">Enabled:</label>
-						<div class="col-sm-8">
+						<div class="col-sm-8" style="display:inline">
 							<input type="checkbox" th:field="*{enabled}" />
 						</div>
 					</div>
