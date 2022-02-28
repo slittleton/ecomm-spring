@@ -67,6 +67,10 @@
 			<form th:action="@{/users/save}" method="post"
 				style="max-width: 800px" th:object="${user}"
 				onSubmit="return checkEmailUnique(this)">
+				
+				<!-- Hidden Field -->
+				<input type="hidden" th:field="*{id}"/>
+				
 				<div class="border border-round-secondary rounded p-3">
 
 					<!--  Email Field -->
@@ -97,8 +101,12 @@
 					<div>
 						<label class="col-sm-4 col-form-label">Password:</label>
 						<div class="col-sm-8">
-							<input type="password" class="form-control"
+							<!-- if id exists then password NOT required - form is in edit user mode -->
+							<input th:if="${user.id==null}" type="password" class="form-control"
 								th:field="*{password}" required minlength="8" maxlength="20" />
+							<!-- if id is null then password IS required - form is in create user mode -->
+							<input th:if="${user.id!=null}" type="password" class="form-control"
+								th:field="*{password}"  minlength="8" maxlength="20" />
 						</div>
 					</div>
 

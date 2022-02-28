@@ -32,6 +32,29 @@ public class UserRepositoryTest {
 	@Autowired
 	private TestEntityManager entityManager;
 	
+	public Integer getRandomUserId() {
+		
+		Iterable<User> users = repo.findAll();
+		List<Integer> ids = new ArrayList<>();
+		
+		for(User user: users) {
+			ids.add(user.getId());
+			
+		}
+		
+		Integer userId = 0;
+		Integer count = 0;
+		while(userId ==0 || userId ==1) {
+			
+			userId = (int)(Math.random() * ids.size());
+			if(userId != 1 && userId != 0) break;
+			if(count >= 5) break;
+			count++;
+		}
+		
+		return userId;
+	}
+	
 	@Test
 	public void testCreateUserWithOneRole() {
 		int rand = random.nextInt(10000);
@@ -85,16 +108,32 @@ public class UserRepositoryTest {
 	
 	@Test
 	public void testGetUserbyId() {
-		User user1 = repo.findById(1).get();
-		assertThat(user1).isNotNull();
+		
+		Integer id = getRandomUserId();
+		
+		User user = repo.findById(id).get();
+		
+		System.out.println("ZZZZZZZZZZZZZZZZ: " + id);
+		
+		assertThat(user).isNotNull();
 		
 	}
 	
 	@Test
 	public void testUpdateUserDetails() {
 		int rand = random.nextInt(10000);
+		Iterable<User> users = repo.findAll();
+		List<Integer> ids = new ArrayList<>();
 		
-		User user1 = repo.findById(1).get();
+		for(User user: users) {
+			ids.add(user.getId());
+			
+		}
+		int randomId = (int)(Math.random() * ids.size());
+		int userId = ids.get(randomId);
+		
+
+		User user1 = repo.findById(userId).get();
 		user1.setEnabled(true);
 		user1.setEmail(rand + "user1@useremail.com");
 		
@@ -189,6 +228,35 @@ public class UserRepositoryTest {
 		
 	}
 	
+	
+	@Test
+	public void testCountById() {
+		Iterable<User> users = repo.findAll();
+		List<Integer> ids = new ArrayList<>();
+		
+		for(User user: users) {
+			ids.add(user.getId());
+			
+		}
+		
+		System.out.println(ids.toString());
+		
+		
+		int userId = 0;
+		int count = 0;
+		while(userId ==0 || userId ==1) {
+			
+			userId = (int)(Math.random() * ids.size());
+			if(userId != 1 && userId != 0) break;
+			if(count >= 5) break;
+			count++;
+		}
+
+		
+		 Long countById = repo.countById(userId);
+		 
+		 assertThat(countById).isNotNull().isGreaterThan(0);
+	}
 }
 
 
