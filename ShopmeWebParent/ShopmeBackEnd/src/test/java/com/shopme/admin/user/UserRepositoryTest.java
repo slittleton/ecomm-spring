@@ -257,6 +257,19 @@ public class UserRepositoryTest {
 		 
 		 assertThat(countById).isNotNull().isGreaterThan(0);
 	}
+	
+	@Test
+	public void testDisableUser() {
+		Integer id = this.getRandomUserId();
+		System.out.println("ID :::::::::::: " + id);
+		repo.updateEnabledStatus(id, false);
+	}
+	@Test
+	public void testEnableUser() {
+		Integer id = this.getRandomUserId();
+		System.out.println("ID :::::::::::: " + id);
+		repo.updateEnabledStatus(id, true);
+	}
 }
 
 
