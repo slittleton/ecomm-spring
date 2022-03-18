@@ -10,7 +10,7 @@ import java.nio.file.StandardCopyOption;
 import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.web.multipart.MultipartFile;
 
-public class FIleUploadUtil {
+public class FileUploadUtil {
 
 	public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
 

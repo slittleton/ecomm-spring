@@ -6,6 +6,9 @@ import java.util.NoSuchElementException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,7 @@ import com.shopme.common.entity.User;
 @Transactional
 public class UserService {
 
+	public static final int USERS_PER_PAGE = 4;
 	@Autowired
 	private UserRepository userRepo;
 	@Autowired
@@ -33,28 +37,32 @@ public class UserService {
 		return (List<Role>) roleRepo.findAll();
 	}
 
+	// --- Pagination ---
+	public Page<User> listByPage(int pageNum) {
+		Pageable pageable = PageRequest.of(pageNum - 1, USERS_PER_PAGE);
+
+		return userRepo.findAll(pageable);
+	}
+
 	// --- Save User ---
 	public User save(User user) {
 		boolean isUpdatingUser = (user.getId() != null);
-		
+
 		// if user id exists then get user info so it can be updated
-		if(isUpdatingUser) {
+		if (isUpdatingUser) {
 			User existingUser = userRepo.findById(user.getId()).get();
-			
-				if(user.getPassword().isEmpty()) {
-					user.setPassword(existingUser.getPassword());
-				} else {
-					encodePassword(user);
-				}
-				
-			
-			
+
+			if (user.getPassword().isEmpty()) {
+				user.setPassword(existingUser.getPassword());
+			} else {
+				encodePassword(user);
+			}
+
 		} else {
-			
+
 			encodePassword(user);
 		}
-		
-		
+
 		return userRepo.save(user);
 
 	}
@@ -103,22 +111,21 @@ public class UserService {
 		}
 
 	}
-	
+
 	public void delete(Integer id) throws UserNotFoundException {
 		Long countById = userRepo.countById(id);
-		if(countById == null || countById == 0) {
+		if (countById == null || countById == 0) {
 			throw new UserNotFoundException("Could not find any user with ID " + id);
-			
+
 		}
-		
+
 		userRepo.deleteById(id);
-		
-		
+
 	}
+
 	public void updateUserEnabledStatus(Integer id, boolean enabled) {
-		userRepo.updateEnabledStatus(id,  enabled);
-		
+		userRepo.updateEnabledStatus(id, enabled);
+
 	}
-	
 
 }
